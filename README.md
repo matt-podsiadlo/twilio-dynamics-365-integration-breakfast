@@ -23,7 +23,6 @@ The [functions](functions) directory contains a Twilio Serverless project, creat
 
 The [plugin-dynamics-flex](plugin-dynamics-flex) directory contains a [Twilio Flex Plugins CLI project](https://www.twilio.com/docs/flex/quickstart/getting-started-plugin). The main file of interest here is [plugin-dynamics-flex/src/DynamicsFlexPlugin.js](plugin-dynamics-flex/src/DynamicsFlexPlugin.js), as it contains all logic related to controlling MS Dynamics Behaviour (e.g. screen popping, event logging), via the [Microsoft CIF Framework JavaScript API](https://docs.microsoft.com/en-us/dynamics365/customer-service/channel-integration-framework/reference/microsoft-ciframework)
 
-
 ### Twilio Studio Flow
 
 [studio/voice-ivr-flow.json](studio/voice-ivr-flow.json) contains a [Twilio Studio](https://www.twilio.com/docs/studio) flow definition for an IVR that accepts an incoming call, uses the functions to retrieve relevant Dynamics data, greets the caller and creates a task in Twilio Flex.
@@ -54,13 +53,15 @@ Once deployed, the functions can be viewed in the Twilio Console (https://www.tw
 
 You can follow [this guide](https://www.twilio.com/docs/studio/user-guide#importing-and-exporting-flows) to import the Studio flow contained in [studio/voice-ivr-flow.json](studio/voice-ivr-flow.json). It will look something like this:
 
-TODO add screenshot
+![flow](https://images-5353.twil.io/Voice_IVR_-_Twilio_Studio.png)
 
 ### Deploy your Flex plugin
 
-Change the following value in [plugin-dynamics-flex/src/DynamicsFlexPlugin.js](plugin-dynamics-flex/src/DynamicsFlexPlugin.js) to correspond to your Dynamics org URI:
+Change the following value in [plugin-dynamics-flex/src/DynamicsFlexPlugin.js](plugin-dynamics-flex/src/DynamicsFlexPlugin.js#L9) (line 9) to correspond to your Dynamics org URI:
 
-TODO link code snippet
+```js
+const DYNAMICS_ORG = 'yourorgname.crm4.dynamics.com';
+```
 
 Navigate to the Flex plugin directory and deploy the plugin
 
@@ -80,8 +81,8 @@ Read more Flex plugin development here: https://www.twilio.com/docs/flex/quickst
 
 You may need to enable implicit token authentication flows in your Azure app's manifest:
 
-TODO add manifest SS
+![manifest](https://images-5353.twil.io/manifest.png)
 
 Ensure your application is configured as an Application User in MS Dynamics, and that it hass access to the roles you specified when configuring the CIF integration.
 
-TODO DYNAMICS SCREEN
+![application user](https://images-5353.twil.io/application_user.png)
