@@ -1,0 +1,17 @@
+{
+  "name": "plugin-dynamics-flex",
+  "version": "0.0.29",
+  "private": true,
+  "scripts": {
+    "postinstall": "flex-plugin pre-script-check"
+  },
+  "dependencies": {
+    "flex-plugin-scripts": "^4.2.6-beta.0",
+    "react": "16.5.2",
+    "react-dom": "16.5.2",
+    "loadjs": "*"
+  },
+  "devDependencies": {
+    "@twilio/flex-ui": "^1"
+  }
+}

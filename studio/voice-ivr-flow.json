@@ -1,0 +1,131 @@
+{
+    "description": "IVR for creating a Flex voice task with a Dynamics 365 integration",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "trigger",
+        "transitions": [
+          {
+            "event": "incomingMessage"
+          },
+          {
+            "next": "get-dynamics-token",
+            "event": "incomingCall"
+          },
+          {
+            "event": "incomingRequest"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": -10
+          }
+        }
+      },
+      {
+        "name": "SendCallToAgent",
+        "type": "send-to-flex",
+        "transitions": [
+          {
+            "event": "callComplete"
+          },
+          {
+            "event": "failedToEnqueue"
+          },
+          {
+            "event": "callFailure"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 730,
+            "y": 630
+          },
+          "workflow": "WWa5369fb3baa2757ecda63839dbd1f189",
+          "channel": "TCa198eee67a9c2301c7f68e02dc00adf9",
+          "attributes": "{ \"type\": \"inbound\", \"name\": \"{{widgets.get-contact-record.parsed.first_name}} {{widgets.get-contact-record.parsed.last_name}}\",\n   \"identity\": \"{{contact.channel.address}}\",\n   \"firstName\": \"{{widgets.get-contact-record.parsed.first_name}}\",\n   \"lastName\": \"{{widgets.get-contact-record.parsed.last_name}}\",\n   \"caseNumber\": \"{{widgets.get-contact-record.parsed.CaseNumber}}\",\n   \"incidentID\":\"{{widgets.get-contact-record.parsed.incidentID}}\",\"contact_id\":\"{{widgets.get-contact-record.parsed.contact_id}}\" }"
+        }
+      },
+      {
+        "name": "get-dynamics-token",
+        "type": "run-function",
+        "transitions": [
+          {
+            "next": "get-contact-record",
+            "event": "success"
+          },
+          {
+            "event": "fail"
+          }
+        ],
+        "properties": {
+          "service_sid": "ZS4b5a833b585e02a80b690589fd380ca3",
+          "environment_sid": "ZEee74e829598ba9a3714a9e8c091448ac",
+          "offset": {
+            "x": 290,
+            "y": 240
+          },
+          "function_sid": "ZH8d9f2132c7e32a0f0f46d2f2082356ef",
+          "url": "https://functions-7649-dev.twil.io/get-dynamics-token"
+        }
+      },
+      {
+        "name": "get-contact-record",
+        "type": "run-function",
+        "transitions": [
+          {
+            "next": "say_play_1",
+            "event": "success"
+          },
+          {
+            "event": "fail"
+          }
+        ],
+        "properties": {
+          "service_sid": "ZS4b5a833b585e02a80b690589fd380ca3",
+          "environment_sid": "ZEee74e829598ba9a3714a9e8c091448ac",
+          "offset": {
+            "x": -340,
+            "y": 360
+          },
+          "function_sid": "ZHa01eddbcb3c4ea8aabc566a259caa5e9",
+          "parameters": [
+            {
+              "value": "{{widgets.get-dynamics-token.body}}",
+              "key": "token"
+            },
+            {
+              "value": "{{contact.channel.address}}",
+              "key": "contact"
+            }
+          ],
+          "url": "https://functions-7649-dev.twil.io/get-contact-record"
+        }
+      },
+      {
+        "name": "say_play_1",
+        "type": "say-play",
+        "transitions": [
+          {
+            "next": "SendCallToAgent",
+            "event": "audioComplete"
+          }
+        ],
+        "properties": {
+          "voice": "Polly.Nicole",
+          "offset": {
+            "x": 140,
+            "y": 590
+          },
+          "loop": 1,
+          "say": "Hello {{widgets.get-contact-record.parsed.first_name}}. Thanks for calling FlyOwl Support. We see that you have a case number {{widgets.get-contact-record.parsed.CaseNumber}} open at the moment. Let me connect you to an Agent.",
+          "language": "en-AU"
+        }
+      }
+    ],
+    "initial_state": "Trigger",
+    "flags": {
+      "allow_concurrent_calls": true
+    }
+  }
